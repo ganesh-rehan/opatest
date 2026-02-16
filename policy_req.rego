@@ -21,7 +21,7 @@ allowed_models := [
 
 # Blocked models
 blocked_models := [
-    "openai/gpt-4",
+    "openai-main/gpt-4",
     "anthropic/claude-3-opus"
 ]
 
