@@ -48,7 +48,7 @@ harmful_patterns := [
 ]
 
 # Maximum total message length (characters)
-max_total_message_length := 5000
+max_total_message_length := 500000
 
 # ============================================================================
 # HELPER FUNCTIONS
