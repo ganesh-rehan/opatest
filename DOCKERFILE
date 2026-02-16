@@ -1,0 +1,19 @@
+FROM openpolicyagent/opa:latest
+
+# Set working directory
+WORKDIR /policies
+
+# Copy all policy files
+COPY policy_bearer.rego .
+COPY policy_hard.rego .
+COPY policy_header.rego .
+COPY policy.rego .
+COPY policy_reject.rego .
+COPY policy_req.rego .
+
+# Expose OPA server port
+EXPOSE 8181
+
+# Run OPA server and load the default policy (policy_req.rego)
+# You can change which policy to load by modifying the CMD
+CMD ["run", "--server", "--addr", ":8181", "/policies/policy_req.rego"]
