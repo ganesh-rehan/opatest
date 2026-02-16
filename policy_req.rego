@@ -102,7 +102,7 @@ has_harmful_content(messages) if {
 
 # Rule 1: Allow if model is in allowed list AND messages are clean
 allow_decision if {
-    not input.response  # Input validation only
+    # not input.response  # Input validation only
     
     # Check model
     model := input.request.model
