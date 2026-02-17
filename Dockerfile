@@ -15,18 +15,7 @@ COPY policy_req.rego .
 EXPOSE 8181
 
 # Run OPA server and load ALL policies
-CMD [
-    "run", \
-     "--server", \
-     "--addr", ":8181", \
-     "--log-level", "info", \
-     "/policies/authz_team_allow.rego", \
-     "/policies/authz_team_deny.rego", \
-     "/policies/mcp_fetch.rego", \
-     "/policies/policy_bearer.rego", \
-     "/policies/policy_mcp.rego", \
-     "/policies/policy_req.rego"
-    ]
+CMD ["run", "--server", "--addr", ":8181", "--log-level", "info", "/policies/authz_team_allow.rego", "/policies/authz_team_deny.rego", "/policies/mcp_fetch.rego", "/policies/policy_bearer.rego", "/policies/policy_mcp.rego", "/policies/policy_req.rego"]
 
 # FROM openpolicyagent/opa:latest
 # WORKDIR /policies
