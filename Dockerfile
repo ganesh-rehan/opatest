@@ -28,6 +28,7 @@
 #     ]
 
 FROM openpolicyagent/opa:latest
+WORKDIR /policies
 
 # Expose OPA server port
 EXPOSE 8181
