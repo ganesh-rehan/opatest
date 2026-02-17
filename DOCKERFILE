@@ -4,12 +4,13 @@ FROM openpolicyagent/opa:latest
 WORKDIR /policies
 
 # Copy all policy files
-COPY policy_bearer.rego .
-COPY policy_hard.rego .
-COPY policy_header.rego .
-COPY policy.rego .
-COPY policy_reject.rego .
+# COPY policy_bearer.rego .
+# COPY policy_hard.rego .
+# COPY policy_header.rego .
+# COPY policy.rego .
+# COPY policy_reject.rego .
 COPY policy_req.rego .
+COPY policy_mcp.rego
 
 # Expose OPA server port
 EXPOSE 8181
