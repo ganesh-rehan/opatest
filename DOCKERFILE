@@ -10,7 +10,7 @@ WORKDIR /policies
 # COPY policy.rego .
 # COPY policy_reject.rego .
 COPY policy_req.rego .
-COPY policy_mcp.rego
+COPY policy_mcp.rego .
 
 # Expose OPA server port
 EXPOSE 8181
