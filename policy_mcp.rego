@@ -11,7 +11,7 @@ import future.keywords.in
 default allow_decision := false
 
 # Allowed MCP tools
-allowed_tools := ["add", "subtract"]
+allowed_tools := ["add", "subtract", "get_gateway_metrics"]
 
 # Blocked MCP server names
 blocked_server_names := ["Shubh Calculator"]
