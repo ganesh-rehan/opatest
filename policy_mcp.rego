@@ -14,7 +14,7 @@ default allow_decision := true
 blocked_tools := ["multiply", "divide"]
 
 # Blocked MCP server names
-blocked_server_names := ["Shubh Calculator"]
+blocked_server_names := ["shubh-calculator"]
 
 # ============================================================================
 # HELPER FUNCTIONS
@@ -39,15 +39,15 @@ is_server_blocked(server_name) if {
 # MCP TOOL VALIDATION RULES
 # ============================================================================
 
-# Rule: Block specific tools (multiply and divide) OR blocked servers 
+# Rule 1: Block if tool is blocked
 allow_decision := false if {
-    # Check if this is an MCP tool call (has tool_name in metadata)
     tool_name := get_tool_name(input.metadata)
-
-    # Check if tool is in blocked list
     is_tool_blocked(tool_name)
-    is_server_blocked(input.metadata.mcp_server_name)
+}
 
+# Rule 2: Block if server is blocked
+allow_decision := false if {
+    is_server_blocked(input.metadata.mcp_server_name)
 }
 
 
