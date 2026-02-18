@@ -7,11 +7,11 @@ import future.keywords.in
 # CONFIGURATION
 # ============================================================================
 
-# Default deny
-default allow_decision := false
+# Default allow (inverse logic - block specific tools)
+default allow_decision := true
 
-# Allowed MCP tools
-allowed_tools := ["add", "subtract", "get_gateway_metrics"]
+# Blocked MCP tools
+blocked_tools := ["multiply", "divide"]
 
 # Blocked MCP server names
 blocked_server_names := ["Shubh Calculator"]
@@ -25,9 +25,9 @@ get_tool_name(metadata) := tool_name if {
     tool_name := metadata.tool_name
 }
 
-# Check if tool is allowed
-is_tool_allowed(tool_name) if {
-    tool_name in allowed_tools
+# Check if tool is blocked
+is_tool_blocked(tool_name) if {
+    tool_name in blocked_tools
 }
 
 # Check if server is blocked
@@ -39,17 +39,17 @@ is_server_blocked(server_name) if {
 # MCP TOOL VALIDATION RULES
 # ============================================================================
 
-# Rule: Allow only specific MCP tools (add and subtract) AND server is not blocked
-allow_decision if {
+# Rule: Block specific tools (multiply and divide) OR blocked servers 
+allow_decision := false if {
     # Check if this is an MCP tool call (has tool_name in metadata)
     tool_name := get_tool_name(input.metadata)
 
-    # Check if tool is in allowed list
-    is_tool_allowed(tool_name)
+    # Check if tool is in blocked list
+    is_tool_blocked(tool_name)
+    is_server_blocked(input.metadata.mcp_server_name)
 
-    # Check if server is not blocked
-    not is_server_blocked(input.metadata.mcp_server_name)
 }
+
 
 # ============================================================================
 # VIOLATIONS & DESCRIPTIONS
@@ -58,28 +58,28 @@ allow_decision if {
 # Success description
 description := msg if {
     tool_name := get_tool_name(input.metadata)
-    is_tool_allowed(tool_name)
+    not is_tool_blocked(tool_name)
     not is_server_blocked(input.metadata.mcp_server_name)
     msg := sprintf("Tool validation successful: '%s' is allowed on server '%s'", [tool_name, input.metadata.mcp_server_name])
 }
 
-# Failure - tool not allowed
+# Failure - tool blocked
 description := msg if {
     tool_name := get_tool_name(input.metadata)
-    not is_tool_allowed(tool_name)
-    msg := sprintf("Tool validation failed: '%s' is not in allowed list [add, subtract]", [tool_name])
+    is_tool_blocked(tool_name)
+    msg := sprintf("Tool validation failed: '%s' is blocked. Blocked tools: [multiply, divide]", [tool_name])
 }
 
 # Failure - server blocked
 description := msg if {
     tool_name := get_tool_name(input.metadata)
-    is_tool_allowed(tool_name)
+    not is_tool_blocked(tool_name)
     is_server_blocked(input.metadata.mcp_server_name)
     msg := sprintf("Tool validation failed: server '%s' is not allowed", [input.metadata.mcp_server_name])
 }
 
 # Default description if no tool_name
-description := "Tool validation failed: No tool name provided" if {
+description := "Tool validation successful: No tool validation required" if {
     not input.metadata.tool_name
 }
 
@@ -89,17 +89,13 @@ description := "Tool validation failed: No tool name provided" if {
 
 violations contains msg if {
     tool_name := get_tool_name(input.metadata)
-    not is_tool_allowed(tool_name)
-    msg := sprintf("Tool '%s' is not allowed. Allowed tools: [add, subtract]", [tool_name])
+    is_tool_blocked(tool_name)
+    msg := sprintf("Tool '%s' is blocked. Blocked tools: [multiply, divide]", [tool_name])
 }
 
 violations contains msg if {
     is_server_blocked(input.metadata.mcp_server_name)
     msg := sprintf("Server '%s' is blocked", [input.metadata.mcp_server_name])
-}
-
-violations contains "No tool name provided in metadata" if {
-    not input.metadata.tool_name
 }
 
 # ============================================================================
