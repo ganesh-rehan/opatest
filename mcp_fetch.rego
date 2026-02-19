@@ -10,7 +10,7 @@ allow_decision if {
 
 is_blocked_tool if {
     input.metadata.tool_name == "fetch"
-    input.metadata.mcp_server_name == "nm fetch"
+    input.metadata.mcp_server_name == "nm-fetch"
 }
 
 # Return format expected by handler
