@@ -7,7 +7,7 @@ package authz_team_allow
 default allow_decision := false
 
 allow_decision if {
-    input.metadata.team_name == "test-team"
+    "test-team" in input.metadata.team_name
 }
 
 # Path authz_team/allow returns this object so gateway gets result.allow
