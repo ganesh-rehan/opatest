@@ -2,7 +2,7 @@ package mcp_output
                                                                                                                                                                                                           
   default allow = true                                                                                                                                                                                    
                                                                                                                                                                                                           
-  allow = false {                                                                                                                                                                                         
+  allow = false if{                                                                                                                                                                                         
       input.metadata.mcp_server_name == "deepwiki-sucecsui"
       content := input.request.content[0].text
       contains(content, "microsoft/vscode")                                                                                                                                                               
